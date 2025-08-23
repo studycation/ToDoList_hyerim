@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:sans-serif;max-width:640px;margin:40px auto;padding:0 16px}
+    form{display:flex;flex-direction:column;gap:12px}
+    input{padding:10px;border:1px solid #ccc;border-radius:8px}
+    button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer}
+    .btn{background:#111;color:#fff}
+    .info{color:#090;margin-bottom:8px}
+    .error{color:#c00;margin-bottom:8px}
+    a{color:#06f;text-decoration:none}
+  </style>
+</head>
+<body>
+  <h1>로그인</h1>
+
+  {{#registered}}<div class="info">회원가입이 완료되었습니다. 이제 로그인하세요.</div>{{/registered}}
+  {{#param.error}}<div class="error">이메일 또는 비밀번호가 올바르지 않습니다.</div>{{/param.error}}
+  {{#param.logout}}<div class="info">로그아웃되었습니다.</div>{{/param.logout}}
+
+  <form method="post" action="/login">
+    <label>이메일
+      <input type="text" name="username" placeholder="you@example.com" required>
+    </label>
+    <label>비밀번호
+      <input type="password" name="password" placeholder="비밀번호" required>
+    </label>
+    <button class="btn" type="submit">로그인</button>
+  </form>
+
+  <p style="margin-top:16px">아직 계정이 없나요? <a href="/signup">회원가입</a></p>
+</body>
+</html>
