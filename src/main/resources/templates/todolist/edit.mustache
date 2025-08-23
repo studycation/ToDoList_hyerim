@@ -1,0 +1,23 @@
+{{>layouts/header}}
+
+{{#todo}}
+<form class="container" action="/todolist/update" method="post">
+    <input name="id" type="hidden" value="{{id}}">
+    <div class="mb-3">
+        <label class="form-label">할일 이름</label>
+        <input type="text" class="form-control" name="title" value="{{title}}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">할일 날짜</label>
+        <input type="date" class="form-control" name="date" value="{{date}}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">할일 내용</label>
+        <textarea class="form-control" rows="3" name="content">{{content}}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/todolist/{{id}}">Back</a>
+</form>
+{{/todo}}
+
+{{>layouts/footer}}

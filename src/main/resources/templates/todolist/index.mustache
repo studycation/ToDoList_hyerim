@@ -1,0 +1,26 @@
+{{>layouts/header}}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Date</th>
+        <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#todo_List}}
+        <tr>
+            <th>{{id}}</th>
+            <td><a href="/todolist/{{id}}">{{title}}</a></td>
+            <td>{{title}}</td>
+            <td>{{date}}</td>
+            <td>{{content}}</td>
+        </tr>
+    {{/todo_List}}
+    </tbody>
+</table>
+
+<a href="/todolist/new">New Todo</a>
+
+{{>layouts/footer}}
