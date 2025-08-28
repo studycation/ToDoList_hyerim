@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @ToString
 @Entity
 @Getter
-public class Todo {
+public class MyTodo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,12 +28,13 @@ public class Todo {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void patch(Todo todo) {
-        if(todo.title != null)
-            this.title = todo.title;
-        if(todo.date  != null)
-            this.date = todo.date;
-        if(todo.content!= null)
-            this.content = todo.content;
+
+    public void patch(MyTodo mytodo) {
+        if(mytodo.title != null)
+            this.title = mytodo.title;
+        if(mytodo.date  != null)
+            this.date = mytodo.date;
+        if(mytodo.content!= null)
+            this.content = mytodo.content;
     }
 }

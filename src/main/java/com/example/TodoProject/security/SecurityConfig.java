@@ -56,12 +56,14 @@ public class SecurityConfig {
                                 "/css/**", "/js/**", "/images/**", "/image/**",
                                 "/h2-console/**"
                         ).permitAll()
+                        .requestMatchers("/mytodo").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")              // GET 로그인 페이지
                         .loginProcessingUrl("/login")     // POST 인증 처리(스프링 시큐리티가 가로챔)
                         .defaultSuccessUrl("/todolist", true)
+                        .defaultSuccessUrl("/mytodo", true)
                         .failureUrl("/login?error")
                         .permitAll()
                 )

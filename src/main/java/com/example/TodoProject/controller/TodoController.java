@@ -2,10 +2,13 @@ package com.example.TodoProject.controller;
 
 import com.example.TodoProject.dto.TodoForm;
 import com.example.TodoProject.entity.Todo;
+import com.example.TodoProject.entity.User;
 import com.example.TodoProject.repository.TodoRepository;
+import com.example.TodoProject.repository.UserRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +22,14 @@ import java.util.List;
 @Slf4j
 @Controller
 public class TodoController {
-    @Autowired // 스프링 부트가 미리 생성해 놓은 리파지터리 객체 주입(DI)
-    private TodoRepository todoRepository;
+
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
+
+    public TodoController(TodoRepository todoRepository, UserRepository userRepository) {
+        this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/todolist/new")
     public String newTodoForm(){
@@ -28,11 +37,13 @@ public class TodoController {
     }
 
     @PostMapping("/todolist/create")
-    public String createTodo(TodoForm form){
+    public String createTodo(TodoForm form,
+                             @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails){
         log.info(form.toString());
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         // System.out.println(form.toString());
         // 1. DTO를 엔티티로 변환
-        Todo todo = form.toEntity();
+        Todo todo = form.toEntity(user);
         log.info(todo.toString());
         // System.out.println(todo.toString());
         // 2. 리파지터리로 엔티티를 DB에 저장
@@ -74,10 +85,12 @@ public class TodoController {
     }
 
     @PostMapping("/todolist/update")
-    public String update(TodoForm form) {
+    public String update(TodoForm form,
+                         @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
         log.info(form.toString());
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
         // 1. DTO를 엔티팅로 변환하기
-        Todo todoEntity = form.toEntity();
+        Todo todoEntity = form.toEntity(user);
         log.info(todoEntity.toString());
         // 2. 엔티티를 DB에 저장하기
         // 2-1. DB에서 기존 데이터 가져오기

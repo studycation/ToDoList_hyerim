@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,24 +34,20 @@ public class UserService {
     }
 
     public User registerKakaoUser(String email, String nickname) {
-        // 이메일이 없으면 임시 이메일 생성
         if (email == null || email.isEmpty()) {
-            email = "kakao_" + System.currentTimeMillis() + "@todo.com";
+            // 이메일 없으면 임시 이메일 생성
+            email = nickname + "@kakao.com"; // 닉네임 기반
         }
 
-        // 이미 가입된 사용자인지 확인
-        User user = userRepository.findByEmail(email).orElse(null);
-
-        if(user == null){
-            // 신규 회원이면 저장
-            user = User.builder()
-                    .email(email)
-                    .password(passwordEncoder.encode("kakao_default_password"))
-                    .nickname(nickname)
-                    .build();
-
-            userRepository.save(user);
+        Optional<User> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent()) {
+            return existingUser.get();
         }
-        return user;
+
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setNickname(nickname);
+        newUser.setPassword("1234"); // 임시 비밀번호
+        return userRepository.save(newUser);
     }
 }

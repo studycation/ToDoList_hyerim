@@ -1,3 +1,4 @@
+
 {{>layouts/header}}
 <table class="table">
     <thead>
@@ -6,22 +7,21 @@
         <th scope="col">Title</th>
         <th scope="col">Date</th>
         <th scope="col">Content</th>
-        <th scope="col">User</th>
     </tr>
     </thead>
     <tbody>
-    {{#todo_List}}
+    {{#mytodo_List}}
         <tr>
             <th>{{id}}</th>
-            <td><a href="/todolist/{{id}}">{{title}}</a></td>
+            <td><a href="/mytodo/{{id}}">{{title}}</a></td>
             <td>{{date}}</td>
             <td>{{content}}</td>
-            <td>{{user.nickname}}</td>
         </tr>
-    {{/todo_List}}
+    {{/mytodo_List}}
     </tbody>
 </table>
-<a href="/mytodo" class="btn btn-primary">My Todo</a>
-<a href="/todolist/new">New Todo</a>
+
+<a href="/todolist" class="btn btn-primary">Todo List</a>
+<a href="/mytodo/new">New Todo</a>
 
 {{>layouts/footer}}

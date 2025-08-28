@@ -1,0 +1,27 @@
+{{>layouts/header}}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Date</th>
+        <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#mytodo}}
+    <tr>
+        <th>{{id}}</th>
+        <td>{{title}}</td>
+        <td>{{date}}</td>
+        <td>{{content}}</td>
+    </tr>
+    {{/mytodo}}
+    </tbody>
+</table>
+
+<a href="/mytodo/{{mytodo.id}}/edit" class="btn btn-primary">Edit</a>
+<a href="/mytodo/{{mytodo.id}}/delete" class="btn btn-danger">Delete</a>
+<a href="/mytodo">Go to My Todo</a>
+
+{{>layouts/footer}}

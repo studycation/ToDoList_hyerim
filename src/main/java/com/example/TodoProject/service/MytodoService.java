@@ -1,9 +1,9 @@
 package com.example.TodoProject.service;
 
-import com.example.TodoProject.dto.TodoForm;
-import com.example.TodoProject.entity.Todo;
+import com.example.TodoProject.dto.MyTodoForm;
+import com.example.TodoProject.entity.MyTodo;
 import com.example.TodoProject.entity.User;
-import com.example.TodoProject.repository.TodoRepository;
+import com.example.TodoProject.repository.MytodoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,32 +16,32 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TodoService {
+public class MytodoService {
     @Autowired
-    private TodoRepository todoRepository;
+    private MytodoRepository mytodoRepository;
 
-    public List<Todo> index() {
-        return todoRepository.findAll();
+    public List<MyTodo> index() {
+        return mytodoRepository.findAll();
     }
 
-    public Todo show(Long id) {
-        return todoRepository.findById(id).orElse(null);
+    public MyTodo show(Long id) {
+        return mytodoRepository.findById(id).orElse(null);
     }
 
-    public Todo create(TodoForm dto, User user) {
-        Todo todo = dto.toEntity(user);
+    public MyTodo create(MyTodoForm dto, User user) {
+        MyTodo todo = dto.toEntity(user);
         if (todo.getId() != null) {
             return null;
         }
-        return todoRepository.save(todo);
+        return mytodoRepository.save(todo);
     }
 
-    public Todo update(Long id, TodoForm dto, User user) {
+    public MyTodo update(Long id, MyTodoForm dto, User user) {
         // 1. DTO -> 엔티티 변환하기
-        Todo todo = dto.toEntity(user);
+        MyTodo todo = dto.toEntity(user);
         log.info("id: {}, todo: {}", id, todo.toString());
         // 2. 타깃 조회하기
-        Todo target = todoRepository.findById(id).orElse(null);
+        MyTodo target = mytodoRepository.findById(id).orElse(null);
         // 3. 잘못된 요청 처리하기
         if(target == null || id != todo.getId()) {
             // 400, 잘못된 요청 응답!
@@ -50,35 +50,34 @@ public class TodoService {
         }
         // 4. 업데이트 및 정상 응답(200)하기
         target.patch(todo);
-        Todo updated = todoRepository.save(target);
-        return updated;
+        MyTodo myupdated = mytodoRepository.save(target);
+        return myupdated;
     }
 
-    public Todo delete(Long id) {
+    public MyTodo delete(Long id) {
         // 1. 대상 찾기
-        Todo target = todoRepository.findById(id).orElse(null);
+        MyTodo mytarget = mytodoRepository.findById(id).orElse(null);
         // 2. 잘못된 요청 처리하기
-        if(target == null) {
+        if(mytarget == null) {
             return null;
         }
         // 3. 대상 삭제하기
-        todoRepository.delete(target);
-        return target;
+        mytodoRepository.delete(mytarget);
+        return mytarget;
     }
 
     @Transactional
-    public List<Todo> createTodolist(List<TodoForm> dtos, User user) {
+    public List<MyTodo> createTodolist(List<MyTodoForm> dtos, User user) {
         // 1. dto 묶음을 엔티티 묶음으로 변환하기
-        List<Todo> todoList = dtos.stream()
-                .map(dto -> dto.toEntity(user))
+        List<MyTodo> mytodoList = dtos.stream()
+                .map(dto -> dto.toEntity(user))  // user 포함
                 .collect(Collectors.toList());
         // 2. 엔티티 묶음을 DB에 저장하기
-        todoList.stream()
-                .forEach(todo -> todoRepository.save(todo));
+        mytodoList.forEach(todo -> mytodoRepository.save(todo));
         // 3. 강제 예외 발생시키기
-        todoRepository.findById(-1L)
+        mytodoRepository.findById(-1L)
                 .orElseThrow(() -> new IllegalArgumentException("결제 실패!"));
         // 4. 결과 값 반환하기
-        return todoList;
+        return mytodoList;
     }
 }
