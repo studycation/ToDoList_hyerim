@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/login", "/signup", "/auth/**",
-                                "/css/**", "/js/**", "/images/**",
+                                "/css/**", "/js/**", "/images/**", "/image/**",
                                 "/h2-console/**"
                         ).permitAll()
                         .anyRequest().authenticated()

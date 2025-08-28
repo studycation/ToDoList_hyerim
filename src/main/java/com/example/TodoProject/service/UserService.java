@@ -30,4 +30,26 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public User registerKakaoUser(String email, String nickname) {
+        // 이메일이 없으면 임시 이메일 생성
+        if (email == null || email.isEmpty()) {
+            email = "kakao_" + System.currentTimeMillis() + "@todo.com";
+        }
+
+        // 이미 가입된 사용자인지 확인
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if(user == null){
+            // 신규 회원이면 저장
+            user = User.builder()
+                    .email(email)
+                    .password(passwordEncoder.encode("kakao_default_password"))
+                    .nickname(nickname)
+                    .build();
+
+            userRepository.save(user);
+        }
+        return user;
+    }
 }
